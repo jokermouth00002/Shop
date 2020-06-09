@@ -1,6 +1,7 @@
 <template lang='pug'>
   #app
     #nav
+    div 購物車({{ $store.getters.totalItemCount }})
     router-view
 </template>
 
