@@ -19,7 +19,6 @@ Vue.prototype.$apiErrorHandler = (err) => {
 }
 
 window.$ = jquery
-
 new Vue({
   router,
   store,
