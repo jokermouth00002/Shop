@@ -48,6 +48,7 @@ export default {
   },
   created() {
     window.app = this
+
     this.$api.get('posts1').then(res => {
       this.cartIcon = res.data[0].content
     })
