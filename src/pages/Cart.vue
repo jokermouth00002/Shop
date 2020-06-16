@@ -1,7 +1,7 @@
 <template lang='pug'>
   div.cartPage
     div.shoppingStep
-      div(:class="[step===1 ? 'styleOn':'styleOff']",@click='step=1')
+      div(:class="[step===1 ? 'styleOn':'styleOff']")
         div 訂單資料
       div(:class="[step===2 ? 'styleOn':'styleOff']")
         div 確認付款
