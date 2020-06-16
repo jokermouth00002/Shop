@@ -1,5 +1,6 @@
 <template lang='pug'>
   #app
+    div.mask(v-if='showMask')
     div.header
       div.row
         router-link(to='/').title.col-6 Store
@@ -28,20 +29,33 @@
         div(@click='mobileMenuButton=true')
           router-link(to='/productList') 商品
     router-view
+    div.footer
+      router-link.fas.fa-home(to='/')
+      div Calling 0123456789
+      div ChrisTsao@gmail.com
+      div 台北市一區二路三巷四號
+      div 2020 Created by ChrisTsao
+      div 僅個人練習,無商業用途
 </template>
 <script>
 export default {
   data() {
     return {
       cartIcon: '',
-      mobileMenuButton: true
+      mobileMenuButton: true,
+      showMask: false
     }
   },
   created() {
     window.app = this
     this.$api.get('posts1').then(res => {
       this.cartIcon = res.data[0].content
-      console.log(!this.mobileMenuButton)
+    })
+    this.$bus.$on('openMask', () => {
+      this.showMask = true
+    })
+    this.$bus.$on('closeDetailMask', () => {
+      this.showMask = false
     })
   }
 }
@@ -54,7 +68,14 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
+.mask {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: #505050;
+  z-index: 1;
+  opacity: 0.7;
+}
 body {
   margin: 0;
   .header {
@@ -138,6 +159,9 @@ body {
   .mobileMenuContainer {
     background-color: wheat;
     padding-left: 45px;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
     div {
       display: flex;
       padding-top: 10px;
@@ -145,6 +169,19 @@ body {
         color: black;
         text-decoration: none;
       }
+    }
+  }
+  .footer {
+    padding: 5%;
+    background-color: black;
+    color: white;
+    padding-bottom: 20px;
+    a {
+      text-decoration: none;
+    }
+    .fa-home {
+      font-size: 30px;
+      color: white;
     }
   }
   .mobileMenu-enter-active {
@@ -155,21 +192,17 @@ body {
   }
   @keyframes mobileMenuOn {
     0% {
-      position: relative;
       left: -100%;
     }
     100% {
-      position: relative;
       left: 0%;
     }
   }
   @keyframes mobileMenuOff {
     0% {
-      position: relative;
       left: 0%;
     }
     100% {
-      position: relative;
       left: -100%;
     }
   }
