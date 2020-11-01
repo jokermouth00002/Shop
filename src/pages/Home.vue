@@ -1,6 +1,8 @@
 <template lang='pug'>
  div
-  div.carousel.slide(data-ride='carousel',data-interval='3000',id='carousel1')
+  div.loading(v-if='loading')
+    div loading...
+  div.carousel.slide(v-else,data-ride='carousel',data-interval='3000',id='carousel1')
     ol.carousel-indicators
       li.active(data-target='#carousel1',data-slide-to='0')
       li(data-target='#carousel1',data-slide-to='1')
@@ -22,8 +24,8 @@
   div.productPreview
     div(v-for='product in productArray')
       img(:src='product.content')
-      p {{product.title}}
-  div.buttonContainer
+      p.pt-6 {{product.title}}
+  div.buttonContainer.noselect
     router-link.button(to='/productList') more
 </template>
 <script>
@@ -32,11 +34,13 @@ export default {
     return {
       sliders: [],
       sloganImg: [],
-      productArray: []
+      productArray: [],
+      loading: true
     }
   },
   created() {
     window.home = this
+    this.loading = true
     this.$api
       .get('/posts1')
       .then(res => {
@@ -49,12 +53,16 @@ export default {
         this.sloganImg = res.data[res.data.length - 1].content
       })
       .catch(this.$apiErrorHandler)
+
     this.$api
       .get('/posts2')
       .then(res => {
         this.productArray = res.data.splice(0, 3)
       })
       .catch(this.$apiErrorHandler)
+      .then(() => {
+        this.loading = false
+      })
   },
   mounted() {
     window.$('.carousel').carousel()
@@ -65,6 +73,22 @@ export default {
 .sloganContainer {
   display: flex;
   justify-content: space-around;
+  .loading {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: #505050;
+    z-index: 1;
+    opacity: 0.7;
+    div {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 50%;
+      font-size: 50px;
+      color: white;
+    }
+  }
   .slogan {
     writing-mode: vertical-rl;
     font-size: 40px;
@@ -87,6 +111,7 @@ export default {
   background-color: #707070;
   display: flex;
   justify-content: space-evenly;
+  padding-top: 3rem;
   div {
     width: 300px;
     height: 300px;
@@ -104,6 +129,8 @@ export default {
   background-color: #707070;
   display: flex;
   justify-content: center;
+  padding-top: 30px;
+  padding-bottom: 20px;
   a {
     text-decoration: none;
   }

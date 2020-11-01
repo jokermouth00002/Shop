@@ -7,7 +7,7 @@ import jquery from 'jquery'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 const api = axios.create({
-  baseURL: 'https://web-demo-api.herokuapp.com',
+  baseURL: process.env.NODE_ENV === 'production' ? 'https://demo-server.christsao.me/shop' : 'http://localhost:39876/shop',
   timeout: 10000
 })
 

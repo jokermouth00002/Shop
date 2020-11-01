@@ -1,15 +1,15 @@
 <template lang='pug'>
   div.goShopping
     div.title 購物車沒商品去逛逛吧
-      div.button(@click='coloseMask()')
-        router-link(to='/productList')
-          div 購物去
+      div.button.d-flex.justify-center.align-center.noselect.pointer(@click='coloseMask()') 購物去
 </template>
 <script>
 export default {
   methods: {
     coloseMask() {
+      this.$router.push({ path: '/productList' })
       this.$bus.$emit('closeDetailMask')
+      window.location.reload()
     }
   }
 }
@@ -34,7 +34,7 @@ export default {
       height: 20%;
       border-style: solid;
       border-width: 1px;
-      border-radius: 10px;
+      border-radius: 20px;
       a {
         text-decoration: none;
         color: black;
@@ -42,10 +42,8 @@ export default {
     }
     .button:hover {
       background-color: black;
-      a {
-        text-decoration: none;
-        color: white;
-      }
+      text-decoration: none;
+      color: white;
     }
   }
 }

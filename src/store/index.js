@@ -8,7 +8,7 @@ export default new Vuex.Store({
     cartItems: []
   },
   mutations: {
-    addProduct(state, { product, quantity }) {
+    addProduct (state, { product, quantity }) {
       const [cartItem] = state.cartItems.filter(cartItem => cartItem.product.id === product.id)
       if (cartItem) {
         cartItem.quantity += quantity

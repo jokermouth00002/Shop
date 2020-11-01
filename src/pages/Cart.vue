@@ -15,7 +15,7 @@
         img(:src='cartItem.product.content')
         div.productInfo
           div.productTitle {{cartItem.product.title}}
-            div.cursor(@click='deleteProduct(cartItem)') x
+            div.cursor.fas.fa-times(@click='deleteProduct(cartItem)')
           div {{cartItem.product.price}}NT
           div.quantity
             div.plusMinus(@click='decrease(cartItem)') -
@@ -49,7 +49,7 @@
             div.errorMsg(v-if='form[3].errorMsg') 必填,請輸入正確收件地址
           input(type='text',v-model='form[3].value')
         div.col-1
-        div.col-3.button(@click='checkList()') 送出訂單
+        div.col-3.button.noselect(@click='checkList()') 送出訂單
         div.col-2
     GoShopping(v-if='plzGoShopping')
     div.payContainer(v-if='step===2')
@@ -126,7 +126,7 @@ export default {
       cartItem.quantity++
     },
     decrease(cartItem) {
-      if (cartItem.quantity > 0) {
+      if (cartItem.quantity > 1) {
         cartItem.quantity--
       }
     },
@@ -174,7 +174,7 @@ export default {
       width: 30%;
       padding-top: 10px;
       padding-bottom: 10px;
-      border-radius: 10px;
+      border-radius: 20px;
       background-color: black;
       color: white;
     }
@@ -183,7 +183,7 @@ export default {
       width: 30%;
       padding-top: 10px;
       padding-bottom: 10px;
-      border-radius: 10px;
+      border-radius: 20px;
       border-style: solid;
       border-width: 1px;
     }
@@ -287,7 +287,7 @@ export default {
         cursor: pointer;
         border-style: solid;
         border-width: 1px;
-        border-radius: 10px;
+        border-radius: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -345,7 +345,7 @@ export default {
         justify-content: center;
         border-style: solid;
         border-width: 1px;
-        border-radius: 10px;
+        border-radius: 20px;
         width: 50%;
         height: 50px;
         cursor: pointer;
