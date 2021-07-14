@@ -8,10 +8,11 @@
         div.menu.col-3
           router-link.noselect(to='/') 首頁
           router-link.noselect(to='/productList') 商品
-          div#customBtn.customGPlusSignIn(ref='googleBtn')
+          div#customBtn.customGPlusSignIn(ref='googleBtn' v-if='userLogin')
             div 登入
             span.icon
             span.buttonText
+          a(href='#' @click='signOut()' v-if='!userLogin') 登出
           router-link.noselect(to='/cart')
             img(:src='cartIcon')
             div.totalItemCount
@@ -28,9 +29,10 @@
             div {{ $store.getters.totalItemCount }}
     transition(name='mobileMenu')
       div.mobileMenuContainer(v-show='!mobileMenuButton')
-        div(@click='mobileMenuButton=true')
+        div(@click='mobileMenuButton=true' v-if='userLogin')
           div#customBtn.customGPlusSignIn(ref='googleBtnM')
             div 登入
+        a(href='#' @click='signOut()' v-if='!userLogin') 登出
         div(@click='mobileMenuButton=true')
           router-link.noselect(to='/') 首頁
         div(@click='mobileMenuButton=true')
@@ -41,7 +43,7 @@
       div(@click.prevnt='foo(5)') Calling 0123456789
       div ChrisTsao@gmail.com
       div 台北市一區二路三巷四號
-      div 2020 Created by ChrisTsao
+      div Created by ChrisTsao
       div 僅個人練習,無商業用途
 </template>
 <script>
@@ -53,7 +55,13 @@ export default {
       mobileMenuButton: true,
       showMask: false,
       auth2: null,
-      googleUser: {}
+      googleUser: {},
+      userInfo: null
+    }
+  },
+  computed: {
+    userLogin: function() {
+      return this.userInfo === null
     }
   },
   mounted() {},
@@ -74,36 +82,52 @@ export default {
     this.$bus.$on('closeDetailMask', () => {
       this.showMask = false
     })
-
     this.startApp()
+    this.userInfo = window.localStorage.getItem('userName') || null
   },
   methods: {
     startApp() {
       window.gapi.load('auth2', () => {
         window.auth2 = window.gapi.auth2.init({
           client_id:
-            '521176421258-n8pnbkeuo778lcfget842baec9b23ged.apps.googleusercontent.com',
+            // '521176421258-n8pnbkeuo778lcfget842baec9b23ged.apps.googleusercontent.com',
+            '207640063746-iloge525vde08lf2sbuqne83odti5ola.apps.googleusercontent.com',
           cookiepolicy: 'single_host_origin'
         })
-        this.attachSignin(this.$refs.googleBtn)
-        this.attachSignin(this.$refs.googleBtnM)
+        if (this.userLogin) {
+          this.attachSignin(this.$refs.googleBtn)
+          this.attachSignin(this.$refs.googleBtnM)
+        } else {
+          console.log('Name:' + this.userInfo)
+        }
       })
     },
     attachSignin(element) {
       window.auth2.attachClickHandler(
         element,
         {},
-        function(googleUser) {
+        googleUser => {
           const profile = googleUser.getBasicProfile()
           console.log('ID: ' + profile.getId()) // Do not send to your backend! Use an ID token instead.
           console.log('Name: ' + profile.getName())
           console.log('Image URL: ' + profile.getImageUrl())
           console.log('Email: ' + profile.getEmail()) // This is null if the 'email' scope is not present.
+          this.userInfo = profile.getName()
+          window.localStorage.setItem('userName', this.userInfo)
         },
-        function(error) {
+        error => {
           alert(JSON.stringify(error, undefined, 2))
         }
       )
+    },
+    signOut() {
+      var auth2 = window.gapi.auth2.getAuthInstance()
+      auth2.signOut().then(() => {
+        console.log('User signed out.')
+        this.userInfo = null
+        window.localStorage.removeItem('userName')
+        this.$router.go()
+      })
     },
     closeDetailMask() {
       this.$bus.$emit('closeDetailMask')
