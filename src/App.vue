@@ -32,7 +32,7 @@
         div(@click='mobileMenuButton=true' v-if='userLogin')
           div#customBtn.customGPlusSignIn(ref='googleBtnM')
             div 登入
-        a(href='#' @click='signOut()' v-if='!userLogin') 登出
+        a.signOut(href='#' @click='signOut()' v-if='!userLogin') 登出
         div(@click='mobileMenuButton=true')
           router-link.noselect(to='/') 首頁
         div(@click='mobileMenuButton=true')
@@ -320,6 +320,10 @@ body {
     font-weight: bold;
     /* Use the Roboto font that is loaded in the <head> */
     font-family: 'Roboto', sans-serif;
+  }
+  .signOut {
+    display: flex;
+    color: black;
   }
 
   @keyframes mobileMenuOn {
